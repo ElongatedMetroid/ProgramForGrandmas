@@ -13,6 +13,8 @@
 
 bool mainMenu();
 bool calculator();
+bool readFile();
+bool newFile();
 int yesorno();
 
 int main(){
@@ -59,10 +61,18 @@ bool mainMenu(){
 
             if(strcmp(choice, CALCULATOR) == 0)
                 calculator();
-            // else if(strcmp(choice, READFILE) == 0)
-            //     readFile();
-            // else if(strcmp(choice, NEWFILE) == 0)
-            //     newFile();
+            else if(strcmp(choice, READFILE) == 0){
+                if(!readFile()){
+                    printf("Error Eccoured while reading the file\n");
+                    sleep(2);
+                }
+            }
+            else if(strcmp(choice, NEWFILE) == 0){
+                if(!newFile()){
+                    printf("Error Eccoured while making a new file\n");
+                    sleep(2);
+                }
+            }
 
             printf(CLEAR);
         }
@@ -121,6 +131,63 @@ bool calculator(){
     }
 
     mainMenu();
+}
+
+bool readFile(){
+    bool success = true;
+    char *filePath = NULL;
+    char *fileLineBuff = NULL;
+    size_t buffsize = 255;
+    FILE *fp = NULL;
+
+    printf(CLEAR);
+
+    if(!(filePath = (char*)malloc(buffsize * sizeof(char)))){
+        printf("Error eccoured while allocating memory for the file path\n");
+        sleep(3);
+        success = false;
+        return success;
+    }
+
+    printf("Enter a file you would like to read (EX: /home/name/documents/text.txt)\n");
+    getline(&filePath, &buffsize, stdin);
+    filePath[strcspn(filePath, "\n")] = '\0';
+
+    if(!(fp = fopen(filePath, "r"))){
+        printf("Error eccoured while opening the file!\nPossibly a non-existant file (path)\n");
+        sleep(3);
+        success = false;
+        return success;
+    }
+
+    free(filePath);
+
+    if(!(fileLineBuff = (char*)malloc(buffsize * sizeof(char)))){
+        printf("Error eccoured while allocating memory for the file line buffer\n");
+        sleep(3);
+        success = false;
+        return success;
+    }
+
+    printf("\n*************************************\n");
+
+    while(!feof(fp)){
+        getline(&fileLineBuff, &buffsize, fp);
+        printf("%s", fileLineBuff);
+    }
+
+    printf("\n*************************************\n");
+
+    fclose(fp);
+    free(fileLineBuff);
+
+    printf("\n\nPress enter to continue...\n");
+    getchar();
+    return success;
+}
+
+bool newFile(){
+    
 }
 
 int yesorno(){
