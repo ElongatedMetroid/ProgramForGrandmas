@@ -19,9 +19,11 @@ int yesorno();
 
 int main(){
 
-    if(!mainMenu()){
-        printf("An error eccoured, please restart the program!\n");
-        exit(EXIT_FAILURE);
+    while(1){
+        if(!mainMenu()){
+            printf("An error eccoured, please restart the program!\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     return 0;
@@ -59,8 +61,9 @@ bool mainMenu(){
             printf("\nRerouting you to your choice...\n");
             sleep(1);
 
-            if(strcmp(choice, CALCULATOR) == 0)
+            if(strcmp(choice, CALCULATOR) == 0){
                 calculator();
+            }
             else if(strcmp(choice, READFILE) == 0){
                 if(!readFile()){
                     printf("Error Eccoured while reading the file\n");
@@ -98,26 +101,18 @@ bool calculator(){
         switch(operator){
             case '+':
             printf("\nAnswer is: %f\n", value1 + value2);
-            sleep(3);
-            printf(CLEAR);
             break;
 
             case '-':
             printf("\nAnswer is: %f\n", value1 - value2);
-            sleep(3);
-            printf(CLEAR);
             break;
 
             case '*':
             printf("\nAnswer is: %f\n", value1 * value2);
-            sleep(3);
-            printf(CLEAR);
             break;
 
             case '/':
             printf("\nAnswer is: %f\n", value1 / value2);
-            sleep(3);
-            printf(CLEAR);
             break;
 
             default:
@@ -125,10 +120,13 @@ bool calculator(){
             if(yesorno() == 0)
                 restart = true;
             else
-                mainMenu();
+                return 0;
             break;
         }
+        break;
     }
+
+    sleep(3);
 
     mainMenu();
 }
@@ -187,7 +185,48 @@ bool readFile(){
 }
 
 bool newFile(){
-    
+    bool success = true;
+    FILE *fp = NULL;
+    char ch = '\0';
+    char *fileNameBuff = NULL;
+    size_t buffsize = 255;
+
+    printf(CLEAR);
+    printf("What would you like to name to new file?\n");
+
+    if(!(fileNameBuff = (char*)malloc(buffsize * sizeof(char)))){
+        printf("Error while allocating memory for the file name buffer!\n");
+        sleep(2);
+        success = false;
+        return success;
+    }
+
+    getline(&fileNameBuff, &buffsize, stdin);
+    fileNameBuff[strcspn(fileNameBuff, "\n")] = '\0';
+
+    if(!(fp = fopen(fileNameBuff, "w+"))){
+        printf("Error in creating file!");
+        free(fileNameBuff);
+        sleep(2);
+        success = false;
+        return success;
+    }
+
+    free(fileNameBuff);
+
+    printf("File is ready to be edited press '`' (backtick) to save and exit.\n\n");
+    printf("\n*************************************\n");
+    while((ch = getchar()) != '`'){
+        fputc(ch, fp);
+    }
+    printf("\n*************************************\n");
+
+    fclose(fp);
+
+    printf("\n\nPress Enter To Continue\n");
+    getchar();
+
+    return success;
 }
 
 int yesorno(){
