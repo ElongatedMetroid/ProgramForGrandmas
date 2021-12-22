@@ -154,6 +154,7 @@ bool readFile(){
     if(!(fp = fopen(filePath, "r"))){
         printf("Error eccoured while opening the file!\nPossibly a non-existant file (path)\n");
         sleep(3);
+        free(filePath);
         success = false;
         return success;
     }
