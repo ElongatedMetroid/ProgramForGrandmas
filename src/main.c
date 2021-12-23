@@ -107,6 +107,7 @@ bool mainMenu(){
             printf(CLEAR);
         }
 
+        printf(CLEAR);
         free(choice);
         choice = NULL;
     }
@@ -153,9 +154,11 @@ bool calculator(){
         break;
     }
 
-    sleep(3);
+    getchar();
+    printf("Press ENTER to continue\n");
+    getchar();
 
-    mainMenu();
+    return 0;
 }
 
 bool readFile(){
@@ -173,6 +176,15 @@ bool readFile(){
         success = false;
         return success;
     }
+
+    printf("YOUR FILES:\n");
+    printf("\n"RED"*************************************"RESET"\n");
+    #if GNU==1 || MAC==1
+        system("ls -l");
+    #elif WIN==1
+        system("dir");
+    #endif
+    printf("\n"RED"*************************************"RESET"\n\n");
 
     printf("Enter a file you would like to read (EX: /home/name/documents/text.txt)\n");
     getline(&filePath, &buffsize, stdin);
@@ -207,7 +219,7 @@ bool readFile(){
     fclose(fp);
     free(fileLineBuff);
 
-    printf("\n\nPress enter to continue...\n");
+    printf("Press ENTER to continue\n");
     getchar();
     return success;
 }
@@ -251,7 +263,8 @@ bool newFile(){
 
     fclose(fp);
 
-    printf("\n\nPress Enter To Continue\n");
+    getchar();
+    printf("Press ENTER to continue\n");
     getchar();
 
     return success;
