@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#include "../includes/colors.h"
+
 #define CLEAR "\e[1;1H\e[2J"
 
 #define CALCULATOR "1"
@@ -11,10 +13,16 @@
 #define NEWFILE "3"
 #define MESSAGEFRIENDS "4"
 
+#define CONFIG "!"
+#define EXIT "@"
+#define HELP "#"
+
 bool mainMenu();
 bool calculator();
 bool readFile();
 bool newFile();
+bool config();
+
 int yesorno();
 
 int main(){
@@ -37,11 +45,16 @@ bool mainMenu(){
     while(success){
         printf(CLEAR);
         printf("Program For Grandma's, Press One of the following number and then Enter to acess it.\n\n");
-
-        printf("Press 1 to acess a calculator\n");
-        printf("Press 2 to read a file from a certain location\n");
-        printf("Press 3 to make a new file that contains text\n");
-        printf("Press 4 to message your friends (COMING SOON)\n");
+        printf(BACBLU"                                                "RESET"\n");
+        printf("* Press 1 to acess a calculator\n");
+        printf("* Press 2 to read a file from a certain location\n");
+        printf("* Press 3 to make a new file that contains text\n");
+        printf("* Press 4 to message your friends (COMING SOON)\n");
+        printf(BACBLU"                                                "RESET);
+        printf("\nPress ! to configure settings\n");
+        printf("Press @ to exit the program\n");
+        printf("Press # for any help you may need with the program\n");
+        printf(BACBLU"                                                "RESET);
 
         printf("\n\nEnter your choice...\n");
 
@@ -76,7 +89,21 @@ bool mainMenu(){
                     sleep(2);
                 }
             }
-
+            //else if(strcmp(choice, MESSAGEFRIENDS) == 0)
+            else if(strcmp(choice, CONFIG) == 0)
+                config();
+            else if(strcmp(choice, EXIT) == 0)
+                exit(EXIT_SUCCESS);
+            #if GNU==1
+                else if(strcmp(choice, HELP) == 0)
+                    system("xdg-open https://github.com/NateNoNameSOFT/ProgramForGrandmas");
+            #elif WIN==1
+                else if(strcmp(choice, HELP) == 0)
+                    system("start https://github.com/NateNoNameSOFT/ProgramForGrandmas");
+            #elif MAC==1
+                else if(strcmp(choice, HELP) == 0)
+                    system("open https://github.com/NateNoNameSOFT/ProgramForGrandmas");
+            #endif
             printf(CLEAR);
         }
 
@@ -168,14 +195,14 @@ bool readFile(){
         return success;
     }
 
-    printf("\n*************************************\n");
+    printf("\n"RED"*************************************"RESET"\n");
 
     while(!feof(fp)){
         getline(&fileLineBuff, &buffsize, fp);
         printf("%s", fileLineBuff);
     }
 
-    printf("\n*************************************\n");
+    printf("\n"RED"*************************************"RESET"\n");
 
     fclose(fp);
     free(fileLineBuff);
@@ -216,11 +243,11 @@ bool newFile(){
     free(fileNameBuff);
 
     printf("File is ready to be edited press '`' (backtick) to save and exit.\n\n");
-    printf("\n*************************************\n");
+    printf("\n"RED"*************************************"RESET"\n");
     while((ch = getchar()) != '`'){
         fputc(ch, fp);
     }
-    printf("\n*************************************\n");
+    printf("\n"RED"*************************************"RESET"\n");
 
     fclose(fp);
 
@@ -228,6 +255,23 @@ bool newFile(){
     getchar();
 
     return success;
+}
+
+bool config(){
+    bool success = true;
+    char *choice = NULL;
+    size_t buffsize = 2;
+
+    printf("What would you like to configure?\n\n");
+
+    printf("Press 1 to edit the theme\n");
+
+    if(strcmp(choice, "1") == 0){
+        printf("Which theme world you like?\n\n");
+
+        printf("Press 1 for white");
+        printf("Press 2 for default black");
+    }
 }
 
 int yesorno(){
