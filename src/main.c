@@ -12,6 +12,7 @@
 #define READFILE "2"
 #define NEWFILE "3"
 #define MESSAGEFRIENDS "4"
+#define LAUNCHPROG "5"
 
 #define CONFIG "!"
 #define EXIT "@"
@@ -21,6 +22,7 @@ bool mainMenu();
 bool calculator();
 bool readFile();
 bool newFile();
+bool launchProg();
 bool config();
 
 int yesorno();
@@ -40,7 +42,7 @@ int main(){
 bool mainMenu(){
     bool success = true;
     char *choice = NULL;
-    size_t buffsize = 3;
+    size_t buffsize = 2;
 
     while(success){
         printf(CLEAR);
@@ -50,6 +52,7 @@ bool mainMenu(){
         printf("* Press 2 to read a file from a certain location\n");
         printf("* Press 3 to make a new file that contains text\n");
         printf("* Press 4 to message your friends (COMING SOON)\n");
+        printf("* Press 5 to launch a program\n");
         printf(BACBLU"                                                "RESET);
         printf("\nPress ! to configure settings\n");
         printf("Press @ to exit the program\n");
@@ -90,6 +93,12 @@ bool mainMenu(){
                 }
             }
             //else if(strcmp(choice, MESSAGEFRIENDS) == 0)
+            else if(strcmp(choice, LAUNCHPROG) == 0){
+                if(!launchProg()){
+                    printf("Error Eccoured While running launchProg()!\n");
+                    exit(1);
+                }
+            }
             else if(strcmp(choice, CONFIG) == 0)
                 config();
             else if(strcmp(choice, EXIT) == 0)
@@ -266,6 +275,40 @@ bool newFile(){
     getchar();
     printf("Press ENTER to continue\n");
     getchar();
+
+    return success;
+}
+
+bool launchProg(){
+    bool success = true;
+    char *progNameBuff = NULL;
+    size_t buffsize = 255;
+
+    printf(CLEAR);
+    printf("Which Program would you like to launch (Programs listed are what you have installed)\n");
+    printf("\n"RED"*************************************"RESET"\n");
+    #if GNU==1 || MAC==1
+        system("apt list --installed");
+    #elif WIN==1
+        system("wmic");
+    #endif
+    printf("\n"RED"*************************************"RESET"\n");
+
+    printf("Witch Program would you like to launch?\n");
+    
+    if(!(progNameBuff = (char*)malloc(buffsize * sizeof(char)))){
+        printf("Error while allocating memory for the prog name buffer!\n");
+        sleep(2);
+        success = false;
+        return success;
+    }
+
+    getline(&progNameBuff, &buffsize, stdin);
+    progNameBuff[strcspn(progNameBuff, "\n")] = '\0';
+    
+    system(progNameBuff);
+
+    printf("Done!");
 
     return success;
 }
