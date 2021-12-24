@@ -46,23 +46,23 @@ bool mainMenu(){
 
     while(success){
         printf(CLEAR);
-        printf("Program For Grandma's, Press One of the following number and then Enter to acess it.\n\n");
+        printf("Program For Grandma's, "GRE"Press One"RESET" of the "YEL"following numbers"RESET" and then "RED"Enter"RESET" to acess it.\n\n");
         printf(BACBLU"                                                "RESET"\n");
-        printf("* Press 1 to acess a calculator\n");
-        printf("* Press 2 to read a file from a certain location\n");
-        printf("* Press 3 to make a new file that contains text\n");
-        printf("* Press 4 to message your friends (COMING SOON)\n");
-        printf("* Press 5 to launch a program\n");
+        printf("* Press 1 to acess a "RED"calculator"RESET"\n");
+        printf("* Press 2 to "YEL"read a file "RESET"from a certain location\n");
+        printf("* Press 3 to make a "GRE"new file "RESET"that contains text\n");
+        printf("* Press 4 to"BLU" message your friends"RESET"(COMING SOON)\n");
+        printf("* Press 5 to"MAG" launch a program"RESET"\n");
         printf(BACBLU"                                                "RESET);
-        printf("\nPress ! to configure settings\n");
-        printf("Press @ to exit the program\n");
-        printf("Press # for any help you may need with the program\n");
+        printf("\nPress ! to"RED" configure settings"RESET"\n");
+        printf("Press @ to"YEL" exit the program"RESET"\n");
+        printf("Press # for any"GRE" help you may need "RESET"with the program\n");
         printf(BACBLU"                                                "RESET);
 
         printf("\n\nEnter your choice...\n");
 
         if(!(choice = (char*)malloc(buffsize * sizeof(char)))){
-            printf("An error eccoured!\nYou will be sent back to the beginning.\n\n");
+            printf("An "RED"error eccoured!"RESET"\nYou will be sent back to the beginning.\n\n");
             sleep(3);
             success = false;    
         }
@@ -71,10 +71,10 @@ bool mainMenu(){
 
         choice[strcspn(choice, "\n")] = '\0';       //removes any newlines from buffer
 
-        printf("You entered %s is this correct? y/n\n", choice);
+        printf("You entered "GRE"%s"RESET" is this correct? y/n\n", choice);
 
         if(yesorno() == 0){
-            printf("\nRerouting you to your choice...\n");
+            printf("\n"BLU"Rerouting you to your choice"RESET""RED"."RESET""YEL"."RESET""GRE"."RESET"\n");
             sleep(1);
 
             if(strcmp(choice, CALCULATOR) == 0){
@@ -126,7 +126,7 @@ bool mainMenu(){
 
 bool calculator(){
     printf(CLEAR);
-    printf("Enter a mathmatical calculation to be preformed... (value1 <+, -, *, /> value2)\n");
+    printf("Enter a "BLU"mathmatical calculation"RESET" to be preformed... (value1 <"RED"+"RESET", "YEL"-"RESET", "GRE"*"RESET", "BLU"/"RESET"> value2)\n");
 
     char operator = '\0';
     float value1, value2;
@@ -137,19 +137,19 @@ bool calculator(){
 
         switch(operator){
             case '+':
-            printf("\nAnswer is: %f\n", value1 + value2);
+            printf("\nAnswer is: "RED"%f"RESET"\n", value1 + value2);
             break;
 
             case '-':
-            printf("\nAnswer is: %f\n", value1 - value2);
+            printf("\nAnswer is: "RED"%f"RESET"\n", value1 - value2);
             break;
 
             case '*':
-            printf("\nAnswer is: %f\n", value1 * value2);
+            printf("\nAnswer is: "RED"%f"RESET"\n", value1 * value2);
             break;
 
             case '/':
-            printf("\nAnswer is: %f\n", value1 / value2);
+            printf("\nAnswer is: "RED"%f"RESET"\n", value1 / value2);
             break;
 
             default:
@@ -164,7 +164,7 @@ bool calculator(){
     }
 
     getchar();
-    printf("Press ENTER to continue\n");
+    printf("Press "GRE"ENTER"RESET" to continue\n");
     getchar();
 
     return 0;
@@ -186,7 +186,7 @@ bool readFile(){
         return success;
     }
 
-    printf("YOUR FILES:\n");
+    printf(GRE"YOUR FILES:"RESET"\n");
     printf("\n"RED"*************************************"RESET"\n");
     #if GNU==1 || MAC==1
         system("ls -l");
@@ -195,7 +195,7 @@ bool readFile(){
     #endif
     printf("\n"RED"*************************************"RESET"\n\n");
 
-    printf("Enter a file you would like to read (EX: /home/name/documents/text.txt)\n");
+    printf("Enter "GRE"a file"RESET" you would like to "RED"read"RESET" "MAG"(EX: /home/name/documents/text.txt)"RESET"\n");
     getline(&filePath, &buffsize, stdin);
     filePath[strcspn(filePath, "\n")] = '\0';
 
@@ -228,7 +228,7 @@ bool readFile(){
     fclose(fp);
     free(fileLineBuff);
 
-    printf("Press ENTER to continue\n");
+    printf("Press "GRE"ENTER"RESET" to continue\n");
     getchar();
     return success;
 }
@@ -241,7 +241,7 @@ bool newFile(){
     size_t buffsize = 255;
 
     printf(CLEAR);
-    printf("What would you like to name to new file?\n");
+    printf("What would you like to "GRE"name to new file?"RESET"\n");
 
     if(!(fileNameBuff = (char*)malloc(buffsize * sizeof(char)))){
         printf("Error while allocating memory for the file name buffer!\n");
@@ -263,7 +263,7 @@ bool newFile(){
 
     free(fileNameBuff);
 
-    printf("File is ready to be edited press '`' (backtick) to save and exit.\n\n");
+    printf("File is ready to be edited "CYA"press '`' (backtick)"RESET" to "GRE"save"RESET" and "RED"exit"RESET".\n\n");
     printf("\n"RED"*************************************"RESET"\n");
     while((ch = getchar()) != '`'){
         fputc(ch, fp);
@@ -273,7 +273,7 @@ bool newFile(){
     fclose(fp);
 
     getchar();
-    printf("Press ENTER to continue\n");
+    printf("Press "GRE"ENTER"RESET" to continue\n");
     getchar();
 
     return success;
@@ -285,7 +285,7 @@ bool launchProg(){
     size_t buffsize = 255;
 
     printf(CLEAR);
-    printf("Which Program would you like to launch (Programs listed are what you have installed)\n");
+    printf("Which "GRE"Program would you like to launch"RESET" "BLU"(Programs listed are what you have installed)"RESET"\n");
     sleep(2);
     printf("\n"RED"*************************************"RESET"\n");
     #if GNU==1 || MAC==1
@@ -295,7 +295,7 @@ bool launchProg(){
     #endif
     printf("\n"RED"*************************************"RESET"\n");
 
-    printf("Witch Program would you like to launch? (it may take awhile to launch)\n");
+    printf("Witch "GRE"Program"RESET" would you like to "GRE"launch?"RESET" "MAG"(it may take awhile to launch)"RESET"\n");
     
     if(!(progNameBuff = (char*)malloc(buffsize * sizeof(char)))){
         printf("Error while allocating memory for the prog name buffer!\n");
