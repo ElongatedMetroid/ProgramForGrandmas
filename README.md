@@ -2,19 +2,24 @@
 A Program that Grandmas Can Use (No Guarente)
 
 # GNU/Linux
-Build With GCC
+Build with GNU Make
 ```bash
-gcc -D GNU=1 -o bin/GNU_x86_64_0.0.1  src/main.c
+make gnu
 ```
 
 # Windows
-Build with GCC-WSL
+Build with GNU Make On WSL
 ```bash
-gcc -D WIN=1 -o bin/WIN_x86_64_0.0.1.exe  src/main.c
+make win
 ```
 
 # Mac
-Build with GCC
+Build with GNU Make
 ```bash
-gcc -D MAC=1 -o bin/MAC_x86_64_0.0.1.app  src/main.c
+make mac
+```
+# All
+Build with GNU Make
+```bash
+make all
 ```
