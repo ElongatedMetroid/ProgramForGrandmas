@@ -286,6 +286,7 @@ bool launchProg(){
 
     printf(CLEAR);
     printf("Which Program would you like to launch (Programs listed are what you have installed)\n");
+    sleep(2);
     printf("\n"RED"*************************************"RESET"\n");
     #if GNU==1 || MAC==1
         system("apt list --installed");
@@ -294,7 +295,7 @@ bool launchProg(){
     #endif
     printf("\n"RED"*************************************"RESET"\n");
 
-    printf("Witch Program would you like to launch?\n");
+    printf("Witch Program would you like to launch? (it may take awhile to launch)\n");
     
     if(!(progNameBuff = (char*)malloc(buffsize * sizeof(char)))){
         printf("Error while allocating memory for the prog name buffer!\n");
