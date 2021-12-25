@@ -3,5 +3,11 @@
 *.app
 *.out
 
-# ignore text files
+# ignore text files (any instructions will be kept in markdown)
 *.txt
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
