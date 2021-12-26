@@ -19,7 +19,7 @@
 #define HELP "#"
 
 bool mainMenu();
-bool calculator();
+void calculator();
 bool readFile();
 bool newFile();
 bool launchProg();
@@ -62,8 +62,7 @@ bool mainMenu(){
         printf("\n\nEnter your choice...\n");
 
         if(!(choice = (char*)malloc(buffsize * sizeof(char)))){
-            printf("An "RED"error eccoured!"RESET"\nYou will be sent back to the beginning.\n\n");
-            sleep(3);
+            printf("An "RED"error eccoured while allocating memory for your choice string!"RESET"");
             success = false;    
         }
 
@@ -71,7 +70,7 @@ bool mainMenu(){
 
         choice[strcspn(choice, "\n")] = '\0';       //removes any newlines from buffer
 
-        printf("You entered "GRE"%s"RESET" is this correct? y/n\n", choice);
+        printf("You entered "YEL"%s"RESET" is this correct? ", choice); printf(GRE"y"RESET"/"RED"n"RESET"\n");
 
         if(yesorno() == 0){
             printf("\n"BLU"Rerouting you to your choice"RESET""RED"."RESET""YEL"."RESET""GRE"."RESET"\n");
@@ -83,20 +82,20 @@ bool mainMenu(){
             else if(strcmp(choice, READFILE) == 0){
                 if(!readFile()){
                     printf("Error Eccoured while reading the file\n");
-                    sleep(2);
+                    success = false;
                 }
             }
             else if(strcmp(choice, NEWFILE) == 0){
                 if(!newFile()){
                     printf("Error Eccoured while making a new file\n");
-                    sleep(2);
+                    success = false;
                 }
             }
             //else if(strcmp(choice, MESSAGEFRIENDS) == 0)
             else if(strcmp(choice, LAUNCHPROG) == 0){
                 if(!launchProg()){
                     printf("Error Eccoured While running launchProg()!\n");
-                    exit(1);
+                    success = false;
                 }
             }
             else if(strcmp(choice, CONFIG) == 0)
@@ -113,6 +112,10 @@ bool mainMenu(){
                 else if(strcmp(choice, HELP) == 0)
                     system("open https://github.com/NateNoNameSOFT/ProgramForGrandmas");
             #endif
+            else{
+                printf("Incorrect Option!");
+                sleep(2);
+            }
             printf(CLEAR);
         }
 
@@ -124,7 +127,7 @@ bool mainMenu(){
     return success;
 }
 
-bool calculator(){
+void calculator(){
     printf(CLEAR);
     printf("Enter a "BLU"mathmatical calculation"RESET" to be preformed... (value1 <"RED"+"RESET", "YEL"-"RESET", "GRE"*"RESET", "BLU"/"RESET"> value2)\n");
 
@@ -157,17 +160,19 @@ bool calculator(){
             if(yesorno() == 0)
                 restart = true;
             else
-                return 0;
+                return;
             break;
         }
         break;
     }
 
+    printf(BACBLU"                                                "RESET"\n");
+
     getchar();
     printf("Press "GRE"ENTER"RESET" to continue\n");
     getchar();
 
-    return 0;
+    return;
 }
 
 bool readFile(){
@@ -181,9 +186,7 @@ bool readFile(){
 
     if(!(filePath = (char*)malloc(buffsize * sizeof(char)))){
         printf("Error eccoured while allocating memory for the file path\n");
-        sleep(3);
         success = false;
-        return success;
     }
 
     printf(GRE"YOUR FILES:"RESET"\n");
@@ -201,34 +204,31 @@ bool readFile(){
 
     if(!(fp = fopen(filePath, "r"))){
         printf("Error eccoured while opening the file!\nPossibly a non-existant file (path)\n");
-        sleep(3);
-        free(filePath);
         success = false;
-        return success;
     }
 
     free(filePath);
 
     if(!(fileLineBuff = (char*)malloc(buffsize * sizeof(char)))){
         printf("Error eccoured while allocating memory for the file line buffer\n");
-        sleep(3);
         success = false;
-        return success;
     }
 
-    printf("\n"RED"*************************************"RESET"\n");
+    if(success == true){
+        printf("\n"RED"*************************************"RESET"\n");
 
-    while(!feof(fp)){
-        getline(&fileLineBuff, &buffsize, fp);
-        printf("%s", fileLineBuff);
+        while(!feof(fp)){
+            getline(&fileLineBuff, &buffsize, fp);
+            printf("%s", fileLineBuff);
+        }
+
+        printf("\n"RED"*************************************"RESET"\n");
+        fclose(fp);
     }
 
-    printf("\n"RED"*************************************"RESET"\n");
-
-    fclose(fp);
     free(fileLineBuff);
 
-    printf("Press "GRE"ENTER"RESET" to continue\n");
+    printf("\nPress "GRE"ENTER"RESET" to continue\n");
     getchar();
     return success;
 }
@@ -245,35 +245,32 @@ bool newFile(){
 
     if(!(fileNameBuff = (char*)malloc(buffsize * sizeof(char)))){
         printf("Error while allocating memory for the file name buffer!\n");
-        sleep(2);
         success = false;
-        return success;
     }
 
     getline(&fileNameBuff, &buffsize, stdin);
     fileNameBuff[strcspn(fileNameBuff, "\n")] = '\0';
 
     if(!(fp = fopen(fileNameBuff, "w+"))){
-        printf("Error in creating file!");
-        free(fileNameBuff);
-        sleep(2);
+        printf("Error in creating file!\n");
         success = false;
-        return success;
     }
 
     free(fileNameBuff);
 
-    printf("File is ready to be edited "CYA"press '`' (backtick)"RESET" to "GRE"save"RESET" and "RED"exit"RESET".\n\n");
-    printf("\n"RED"*************************************"RESET"\n");
-    while((ch = getchar()) != '`'){
-        fputc(ch, fp);
+    if(success == true){
+        printf("File is ready to be edited "CYA"press '`' (backtick)"RESET" to "GRE"save"RESET" and "RED"exit"RESET".\n\n");
+        printf("\n"RED"*************************************"RESET"\n");
+        while((ch = getchar()) != '`'){
+            fputc(ch, fp);
+        }
+        printf("\n"RED"*************************************"RESET"\n");
+        
+        fclose(fp);
+        getchar();
     }
-    printf("\n"RED"*************************************"RESET"\n");
 
-    fclose(fp);
-
-    getchar();
-    printf("Press "GRE"ENTER"RESET" to continue\n");
+    printf("\nPress "GRE"ENTER"RESET" to continue\n");
     getchar();
 
     return success;
@@ -299,9 +296,7 @@ bool launchProg(){
     
     if(!(progNameBuff = (char*)malloc(buffsize * sizeof(char)))){
         printf("Error while allocating memory for the prog name buffer!\n");
-        sleep(2);
         success = false;
-        return success;
     }
 
     getline(&progNameBuff, &buffsize, stdin);
